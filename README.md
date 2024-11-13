@@ -9,7 +9,7 @@ We present a set of benchmarks (NetConfEval) to examine the effectiveness of dif
 ## Installation
 Make sure to use Python 3.10 or later. Install this repository and install all the packages.
 ``` bash
-git clone git@github.com:NetConfEval/NetConfEval.git
+git clone git@github.com:RedHatResearch/NetConfEval.git
 virtualenv venv 
 source venv/bin/activate
 pip install -r requirements.txt
@@ -187,4 +187,4 @@ If you use NetConfEval, please cite our paper:
 ```
 
 ## Help
-If you have any questions regarding our code or the paper, you can contact [Changjie Wang](https://www.kth.se/profile/changjie) (changjie at kth.se) and/or [Mariano Scazzariello](https://www.kth.se/profile/marianos) (marianos at kth.se).
+If you have any questions regarding our code or the paper, you can contact [Changjie Wang](https://www.kth.se/profile/changjie) (changjie at kth.se) and/or [Mariano Scazzariello](https://www.kth.se/profile/marianos) (mariano.scazzariello at ri.se).
