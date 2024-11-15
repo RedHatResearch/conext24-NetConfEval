@@ -140,7 +140,7 @@ The Ollama model Dict contains the following keys:
 {
     'type': 'Ollama', # The type of the model, in this case 'Ollama'
     'model_name': 'llama3:8b-instruct-fp16', # The model name taken from Ollama library
-    'num_predict': 4096, # Max output length
+    'num_predict': 4096 # Max output length
 }
 ```
 
