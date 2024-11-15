@@ -101,7 +101,10 @@ The experiment results will be stored in the directory named `results_low_level`
 ## Support for New Models
 We rely on LangChain to provide a common interface to access different model APIs.
 You can add new supported models in the `netconfeval/common/model_configs.py` file.
-We currently support OpenAI models (`'type': 'openai'`), Ollama models (`'type': 'Ollama'`), and HuggingFace models (`'type': 'HF'`) through a custom LangChain-compatible class (`netconfeval/foundation/langchain/hf.py`).
+We currently support:
+* OpenAI models (`'type': 'openai'`)
+* HuggingFace models (`'type': 'HF'`) through a custom LangChain-compatible class (see `netconfeval/foundation/langchain/hf.py`)
+* Ollama models (`'type': 'Ollama'`) (thanks to @RobertoLorusso) 
 
 To add a model, just add a new Dict element to the `model_configurations` Dict, by providing a unique key for it.
 The new model key is then automatically visible using the `--model` command line parameter of the `.py` tests of the benchmarks.
