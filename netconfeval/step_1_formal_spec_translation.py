@@ -135,7 +135,7 @@ def main(args: argparse.Namespace) -> None:
 
                     skip_compare = False
                     start_time = time.time()
-                    if model_configurations[args.model]['type'] in ['HF','Ollama']:
+                    if model_configurations[args.model]['type'] in ['HF', 'Ollama']:
                         # Combine all system prompts with a new line separator
                         combined_system_prompt = f"{SETUP_PROMPT}\n{FUNCTION_PROMPT}\n{ASK_FOR_RESULT_PROMPT}"
                         messages = [
