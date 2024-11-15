@@ -101,7 +101,7 @@ The experiment results will be stored in the directory named `results_low_level`
 ## Support for New Models
 We rely on LangChain to provide a common interface to access different model APIs.
 You can add new supported models in the `netconfeval/common/model_configs.py` file.
-We currently support OpenAI models (`'type': 'openai'`) and HuggingFace models (`'type': 'HF'`) through a custom LangChain-compatible class (`netconfeval/foundation/langchain/hf.py`).
+We currently support OpenAI models (`'type': 'openai'`), Ollama models (`'type': 'Ollama'`), and HuggingFace models (`'type': 'HF'`) through a custom LangChain-compatible class (`netconfeval/foundation/langchain/hf.py`).
 
 To add a model, just add a new Dict element to the `model_configurations` Dict, by providing a unique key for it.
 The new model key is then automatically visible using the `--model` command line parameter of the `.py` tests of the benchmarks.
@@ -128,6 +128,16 @@ model_configurations = {
         'model_name': 'gpt-4-32k-0613',
         'args': {} # Pass additional parameters if needed
     }
+}
+```
+
+### Ollama Models
+The Ollama model Dict contains the following keys:
+```python
+{
+    'type': 'Ollama', # The type of the model, in this case 'Ollama'
+    'model_name': 'llama3:8b-instruct-fp16', # The model name taken from Ollama library
+    'num_predict': 4096, # Max output length
 }
 ```
 
@@ -158,7 +168,7 @@ model_configurations = {
 ```
 
 ### Adding new model types
-Aside from adding OpenAI and HuggingFace models, it is also possible to add new model types (for example Gemini by Google).
+Aside from adding OpenAI, Ollama, and HuggingFace models, it is also possible to add new model types (for example Gemini by Google).
 
 We will continuously improve support for different APIs, but if you want to contribute:
 - Define a new `type`, coherent with the model types (e.g., `google` for Google models);
@@ -187,4 +197,4 @@ If you use NetConfEval, please cite our paper:
 ```
 
 ## Help
-If you have any questions regarding our code or the paper, you can contact [Changjie Wang](https://www.kth.se/profile/changjie) (changjie at kth.se) and/or [Mariano Scazzariello](https://www.kth.se/profile/marianos) (mariano.scazzariello at ri.se).
+If you have any questions regarding our code or the paper, you can contact [Changjie Wang](https://www.kth.se/profile/changjie) (changjie at kth.se) and/or [Mariano Scazzariello](https://www.ri.se/en/person/mariano-scazzariello) (mariano.scazzariello at ri.se).
