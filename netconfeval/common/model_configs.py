@@ -106,8 +106,60 @@ def _build_mistral_lite_prompt(messages):
 
     return prompt
 
+def _build_qwen2_prompt(messages):
+    
+    start_turn = "<|im_start|>"
+    end_turn = "<|im_end|>\n"
+ 
+
+    conversation = []
+    for index, message in enumerate(messages):
+        parts = message.split(": ", 1)
+        if len(parts) != 2:
+            raise ValueError(f"Invalid message format: {message}")
+
+        role, content = parts
+        content = content.strip()
+
+        if role.lower() in ['user', 'system', 'assistant']:
+            conversation.append(start_turn + role.lower() + '\n' + content + end_turn) 
+        else:
+            raise ValueError(f"Unexpected role: {role}")
+
+   # Assemble the prompt with the start and end tokens and start the turn of assistant to prime the generation process
+    prompt = ' '.join(conversation) + start_turn + "assistant\n" 
+
+    return prompt 
+
+
+def _build_llama3_prompt(messages):
+    start_prompt = "<|begin_of_text|>"
+    start_role = "<|start_header_id|>"
+    end_role = "<|end_header_id|>"
+    end_turn = "<|eot_id|>"
+
+    conversation = []
+    for index, message in enumerate(messages):
+        parts = message.split(": ", 1)
+        if len(parts) != 2:
+            raise ValueError(f"Invalid message format: {message}")
+
+        role, content = parts
+        content = content.strip()
+
+        if role.lower() in ['user', 'system', 'assistant']:
+            conversation.append(start_role + role.lower() + end_role + content + end_turn ) # Example: <|begin_of_text|><|start_header_id|>system<|end_header_id|>
+        else:
+            raise ValueError(f"Unexpected role: {role}")
+
+   # Assemble the prompt with the start and end tokens and start the turn of assistant to prime the generation process
+    prompt = start_prompt + ' '.join(conversation)  + '\n' + start_role + "assistant" + end_role
+    print(prompt)
+    return prompt
+
 
 def get_model_instance(model_name: str) -> Any:
+
     if model_configurations[model_name]['type'] == 'HF':
         from netconfeval.foundation.langchain.chat_models.hf import ChatHF
 
@@ -117,6 +169,15 @@ def get_model_instance(model_name: str) -> Any:
             use_quantization=model_configurations[model_name]['use_quantization'],
             prompt_func=model_configurations[model_name]['prompt_builder'],
         )
+    
+    elif model_configurations[model_name]['type'] == 'Ollama':
+        from langchain_community.llms import Ollama
+
+        return Ollama(model = model_configurations[model_name]['model_name'],
+                      num_predict = model_configurations[model_name]['num_predict'],
+                      num_gpu=-1
+                     )
+        
     elif model_configurations[model_name]['type'] == 'openai':
         from langchain_openai import ChatOpenAI
 
@@ -165,6 +226,74 @@ model_configurations = {
             'seed': 5000,
         }
     },
+
+    #### Start Ollama models ####
+
+    'llama3.1-ollama': {
+        'type': 'Ollama',
+        'model_name': 'llama3.1:8b-instruct-fp16',
+        'num_predict': 4096
+    },
+
+    'llama3-ollama': {
+        'type': 'Ollama',
+        'model_name': 'llama3:8b-instruct-fp16',
+        'num_predict': 4096
+    },
+
+    'neural-chat-ollama': {
+        'type': 'Ollama',
+        'model_name': 'neural-chat:7b-v3.3-fp16',
+        'num_predict': 4096
+    },
+
+    # 4-bit quantization version 
+
+    'llama3.1-4bit-ollama': {
+        'type': 'Ollama',
+        'model_name': 'llama3.1:latest',
+        'num_predict': 4096
+    },
+
+    'llama3-4bit-ollama': {
+        'type': 'Ollama',
+        'model_name': 'llama3:latest',
+        'num_predict': 4096
+    },
+      
+    'neural-chat-4bit-ollama': {
+        'type': 'Ollama',
+        'model_name': 'neural-chat:latest',
+        'num_predict': 4096
+    },
+
+    #### End Ollama models #####
+    
+
+    'qwen2.5-7b-instruct': {
+        'type': 'HF',
+        'model_name':'Qwen/Qwen2.5-7B-Instruct',
+        'prompt_builder': _build_qwen2_prompt,
+        'max_length': 4096,
+        'use_quantization': False
+    },
+
+    'llama3-8b-instruct': {
+        'type': 'HF',
+        'model_name': 'meta-llama/Meta-Llama-3-8B-Instruct',
+        'prompt_builder': _build_llama3_prompt,
+        'max_length': 4096,
+        'use_quantization': False
+    },
+
+    'llama3.1-8b-instruct': {
+        'type': 'HF',
+        'model_name': 'meta-llama/Meta-Llama-3.1-8B-Instruct',
+        'prompt_builder': _build_llama3_prompt,
+        'max_length': 4096,
+        'use_quantization': False
+    },
+
     'llama2-7b-chat': {
         'model_name': 'meta-llama/Llama-2-7b-chat-hf',
         'prompt_builder': _build_llama2_prompt,

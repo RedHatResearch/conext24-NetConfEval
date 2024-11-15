@@ -126,7 +126,7 @@ def main(args: argparse.Namespace) -> None:
                     w = csv.DictWriter(f, result_row.keys())
                     w.writeheader()
 
-                if model_configurations[args.model]['type'] == 'HF':
+                if model_configurations[args.model]['type'] in ['HF','Ollama']:
                     combined_system_prompt = f"{SETUP_PROMPT}\n{ASK_FOR_CODE_PROMPT}"
                     combined_human_prompt = f"{INPUT_OUTPUT_PROMPT}\n{INSTRUCTION_PROMPT}\n{{input}}"
                     if with_feedback:
