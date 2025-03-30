@@ -24,7 +24,7 @@ if [ -z "$fn_call_support" ]; then
   exit 1
 fi
 
-if [ "$fn_call_support" != "0" ] || [ "$fn_call_support" != "1" ]
+if [ "$fn_call_support" != "0" ] && [ "$fn_call_support" != "1" ]
 then
     echo "Invalid value for 'fn_call_support': $fn_call_support." >&2
     exit 1
